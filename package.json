@@ -14,5 +14,21 @@
         "dev": "encore dev",
         "watch": "encore dev --watch",
         "build": "encore production --progress"
+    },
+    "dependencies": {
+        "@vue/compiler-sfc": "^3.2.37",
+        "axios": "^0.27.2",
+        "bootstrap-icons": "^1.8.3",
+        "bulma": "^0.9.4",
+        "css-loader": "^6.7.1",
+        "node-sass": "^7.0.1",
+        "point-in-cirlce": "^1.0.0",
+        "sass-loader": "^12.0.0",
+        "vue": "^3.2.37",
+        "vue-currency-input": "^2.4.0",
+        "vue-loader": "^17.0.0",
+        "vue-router": "^4.0.16",
+        "vue-toast-notification": "^3.0.4",
+        "vuex": "^4.0.2"
     }
 }
