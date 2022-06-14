@@ -45,8 +45,15 @@ class Employee
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups("employee")
      */
     private $active;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     * @Groups("employee")
+     */
+    private $maxHoursPerMonth;
 
     public function __construct()
     {
@@ -120,6 +127,18 @@ class Employee
     public function setActive(bool $active): self
     {
         $this->active = $active;
+
+        return $this;
+    }
+
+    public function getMaxHoursPerMonth(): ?int
+    {
+        return $this->maxHoursPerMonth;
+    }
+
+    public function setMaxHoursPerMonth(?int $maxHoursPerMonth): self
+    {
+        $this->maxHoursPerMonth = $maxHoursPerMonth;
 
         return $this;
     }

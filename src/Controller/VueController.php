@@ -9,6 +9,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class VueController extends AbstractController
 {
     /**
+     * @Route("/")
+     */
+    function home(){
+        return $this->redirectToRoute('vue_admin');
+    }
+
+    /**
      * @Route("/admin", name="vue_admin")
      * @Route("/admin/{route}", name="vue_admin_pages", requirements={"route"="^.+"})
      * @IsGranted("IS_AUTHENTICATED_FULLY")

@@ -9,7 +9,7 @@
         <div class="field">
           <label class="label">Name des Arbeitnehmers</label>
           <div class="control">
-            <input class="input" type="text">
+            <input class="input" v-model="employee.name" type="text">
           </div>
         </div>
       </div>
@@ -18,7 +18,7 @@
         <label class="label">Arbeitsstunden pro Monat</label>
         <div class="field has-addons">
           <div class="control is-expanded">
-            <input class="input" type="number">
+            <input class="input" v-model="employee.maxHoursPerMonth" type="number">
           </div>
           <p class="control">
             <a class="button is-static">
@@ -35,7 +35,7 @@
             <button class="is-fullwidth button is-danger w-50 is-inline is-light" @click="deleteUser" :class="deleting ? 'is-deleting':''"><span v-if="!confirmDelete">Mitarbeiter löschen</span><i class="bi bi-question-lg" v-if="confirmDelete"></i> </button>
           </div>
           <div class="control is-expanded">
-            <button class="is-fullwidth button is-primary w-50 is-inline is-light">Änderungen sichern</button>
+            <button class="is-fullwidth button is-primary w-50 is-inline is-light" @click="updateEmployee">Änderungen sichern</button>
           </div>
         </div>
 
@@ -187,6 +187,12 @@ export default {
       }else{
         this.confirmDelete = true
       }
+    },
+    updateEmployee(){
+      axios.post("/api/v1/admin/employees/" + this.employee.id, this.employee)
+          .then(r => {
+            this.$toast.success("Änderungen übernommen.")
+          })
     }
   }
 }

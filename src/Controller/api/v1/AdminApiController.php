@@ -44,6 +44,19 @@ class AdminApiController extends AbstractController
     }
 
     /**
+     * @Route("/employees/{employee}", methods={"POST"})
+     */
+    function updateEmployee(Employee $employee, Request $request, EntityManagerInterface $em){
+        $data = json_decode($request->getContent(), true);
+        $employee->setName($data["name"]);
+        $employee->setMaxHoursPerMonth($data["maxHoursPerMonth"]);
+        $em->persist($employee);
+        $em->flush();
+
+        return $this->json($employee, 200, [], ["groups" => "employee"]);
+    }
+
+    /**
      * @Route("/employees/{employee}", methods={"DELETE"})
      */
     function deleteEmployee(Employee $employee, EntityManagerInterface $em){
