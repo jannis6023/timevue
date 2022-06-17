@@ -7,7 +7,10 @@
 import NavBar from "../components/NavBar";
 export default {
   name: "AdminFrontend",
-  components: {NavBar}
+  components: {NavBar},
+  mounted() {
+    this.$store.commit("fetchUser")
+  }
 }
 </script>
 
