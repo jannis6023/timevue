@@ -26,14 +26,19 @@ class AdminApiController extends AbstractController
     function createEmployee(Request $request, EntityManagerInterface $em){
         $data = json_decode($request->getContent(), true);
 
-        $employee = new Employee();
-        $employee->setName($data["name"]);
-        $employee->setActive(true);
+        $employee = $em->getRepository(Employee::class)->findOneBy([
+            "name" => $data["name"]
+        ]);
 
-        $em->persist($employee);
-        $em->flush();
+        if($employee == null){
+            $employee = new Employee();
+            $employee->setName($data["name"]);
+            $employee->setActive(true);
+            $em->persist($employee);
+            $em->flush();
+        }
 
-        return $this->json($employee, 200, [], ["groups" => "employee"]);
+        return $this->json($employee, ($employee == null ? 200 : 403), [], ["groups" => "employee"]);
     }
 
     /**
