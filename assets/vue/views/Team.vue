@@ -67,7 +67,7 @@ export default {
             this.loadData()
           })
           .catch((error) => {
-            if(error.response.status === 403){
+            if(error.response.status === 400){
               this.$toast.error("Dieses Team-Mitglied gibt es bereits")
             }
           });

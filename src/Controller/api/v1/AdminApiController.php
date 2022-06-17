@@ -36,9 +36,13 @@ class AdminApiController extends AbstractController
             $employee->setActive(true);
             $em->persist($employee);
             $em->flush();
+
+            return $this->json($employee, 200, [], ["groups" => "employee"]);
         }
 
-        return $this->json($employee, ($employee == null ? 200 : 403), [], ["groups" => "employee"]);
+        return $this->json($employee, 400, [], ["groups" => "employee"]);
+
+
     }
 
     /**
