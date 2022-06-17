@@ -5,6 +5,7 @@
 
 <script>
 import NavBar from "../components/NavBar";
+import "@tabler/core/dist/js/tabler"
 export default {
   name: "AdminFrontend",
   components: {NavBar},
