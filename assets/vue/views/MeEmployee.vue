@@ -1,29 +1,30 @@
 <template>
   <ShiftHistoryModal :show="showHistory" :employee="employee" @close="showHistory = false;"/>
-  <section class="hero bg-1 is-fullheight">
-    <div class="hero-body">
-      <div class="container" v-if="employee !== null">
-        <div class="columns is-centered" v-if="employee.active">
-          <div class="column is-5-tablet is-5-desktop is-5-widescreen">
-            <div class="box" v-if="employee !== null">
-              <h1 class="is-size-3 mb-0">Hi, {{employee.name}}! 👋</h1>
-              <hr class="mt-0">
-              <template v-if="employee.currentShift === null">
-                <div class="message"><div class="message-body">Gerade ist keine Schicht aktiv!</div> </div>
-                <button class="button is-success is-fullwidth" :disabled="loading" :class="loading ? 'is-loading':''" @click="startShift">Schicht starten</button>
-              </template>
-              <template v-if="employee.currentShift !== null">
-                <div class="message"><div class="message-body">Eine Schicht ist seit {{new Date(employee.currentShift.startTime).toLocaleTimeString()}} aktiv.</div></div>
-                <button class="button is-danger is-fullwidth" :disabled="loading" :class="loading ? 'is-loading':''" @click="stopShift">Schicht beenden</button>
-              </template>
-              <hr>
-              <button class="button is-fullwidth" @click="showHistory = true">Schichthistorie anzeigen</button>
+
+  <div class="page page-center">
+    <div class="container-tight py-4" v-if="employee !== null">
+      <div class="card">
+        <div class="card-body">
+          <h1 class="card-title h1 fs-1">Hi, {{employee.name}}! 👋</h1>
+          <hr class="mt-2 mb-3">
+          <div v-if="employee.currentShift === null">
+            <div class="alert alert-danger mb-4">
+              <h3 class="alert-title">Gerade ist keine Schicht aktiv!</h3>
             </div>
+            <button class="btn btn-success w-100" :disabled="loading" :class="loading ? 'btn-loading' : ''" @click="startShift">Schicht starten</button>
           </div>
+          <div v-if="employee.currentShift !== null">
+            <div class="alert alert-success mb-4">
+              <h3 class="alert-title">Eine Schicht ist seit {{new Date(employee.currentShift.startTime).toLocaleTimeString()}} aktiv.</h3>
+            </div>
+            <button class="btn btn-danger w-100" :disabled="loading" :class="loading ? 'btn-loading' : ''" @click="stopShift">Schicht beenden</button>
+          </div>
+          <hr>
+          <button class="btn w-100" @click="showHistory = true">Schichthistorie anzeigen</button>
         </div>
       </div>
     </div>
-  </section>
+  </div>
 </template>
 
 <script>
@@ -49,7 +50,14 @@ export default {
     startShift(){
       this.loading = true
 
-      navigator.geolocation.getCurrentPosition(pos => {
+      axios.put("/api/v1/employee/" + this.id + "/shifts")
+          .then(r => {
+            this.$toast.success("Schicht gestartet!")
+            this.loadData()
+            this.loading = false
+          })
+
+      /*navigator.geolocation.getCurrentPosition(pos => {
         axios.get("/var/requiredLocation")
             .then(r => {
               const circle = {
@@ -69,7 +77,7 @@ export default {
 
               this.loading = false
             })
-      })
+      })*/
 
     },
     loadData(){

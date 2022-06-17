@@ -1,44 +1,45 @@
 <template>
-  <nav class="navbar" role="navigation" aria-label="main navigation">
-    <div class="navbar-brand">
-      <a class="navbar-item" href="https://bulma.io">
-        <h2 class="m-0 is-size-5">TimeVue</h2>
-      </a>
-
-      <button role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" @click="$store.commit('toggleNav')">
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
+  <header class="navbar navbar-expand-md navbar-light d-print-none">
+    <div class="container-fluid">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
+        <span class="navbar-toggler-icon"></span>
       </button>
-    </div>
-
-    <div id="navbarBasicExample" class="navbar-menu" :class="$store.state.showNavMobile ? 'is-active':''">
-      <div class="navbar-start">
-        <router-link to="/admin/dashboard" class="navbar-item" active-class="is-active" tag="a">
-          Dashboard
-        </router-link>
-
-        <router-link to="/admin/team" class="navbar-item" active-class="is-active" tag="a">
-          Team
-        </router-link>
-      </div>
-
-      <div class="navbar-end">
-        <div class="navbar-item">
-          <div class="buttons">
-            <a class="button is-light" href="/logout">
-              Abmelden
-            </a>
+      <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+        <a href=".">
+          TimeVue
+        </a>
+      </h1>
+      <div class="navbar-nav flex-row order-md-last" v-if="$store.state.user != null">
+        <div class="nav-item dropdown">
+          <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
+            <span class="avatar avatar-sm">{{ $store.state.user.displayName.split(" ")[0].charAt(0) + $store.state.user.displayName.split(" ")[1].charAt(0) }}</span>
+            <div class="d-none d-xl-block ps-2">
+              <div>{{ $store.state.user.displayName }}</div>
+              <div class="mt-1 small text-muted">{{ $store.state.user.email }}</div>
+            </div>
+          </a>
+          <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+            <a href="/logout" class="dropdown-item">Logout</a>
           </div>
         </div>
       </div>
+      <div class="collapse navbar-collapse" id="navbar-menu">
+        <div class="d-flex flex-column flex-md-row flex-fill align-items-stretch align-items-md-center">
+          <ul class="navbar-nav">
+            <NavLink to="/admin/dashboard">Dashboard</NavLink>
+            <NavLink to="/admin/team">Team</NavLink>
+          </ul>
+        </div>
+      </div>
     </div>
-  </nav>
+  </header>
 </template>
 
 <script>
+import NavLink from "./NavLink";
 export default {
-  name: "NavBar"
+  name: "NavBar",
+  components: {NavLink}
 }
 </script>
 

@@ -1,82 +1,91 @@
 <template>
-  <div class="container mt-3" v-if="employee !== null">
-    <div class="is-flex is-justify-content-space-between">
-      <h1 class="title mb-0">{{employee.name}}</h1> <button class="button" @click="copyURL"><span class="icon"><i class="bi bi-link"></i></span></button>
-    </div>
-    <hr class="mt-0">
-    <div class="columns">
-      <div class="column ">
-        <div class="field">
-          <label class="label">Name des Arbeitnehmers</label>
-          <div class="control">
-            <input class="input" v-model="employee.name" type="text">
+
+  <div class="page-wrapper" v-if="employee !== null">
+    <div class="container-xl">
+      <!-- Page title -->
+      <div class="page-header d-print-none">
+        <div class="row g-2 align-items-center">
+          <div class="col">
+            <h1 class="page-title fs-1">
+              {{employee.name}}
+            </h1>
+          </div>
+          <div class="col col-md-auto ms-auto d-print-none">
+            <button class="btn btn-primary" @click="copyURL">
+              Link kopieren
+            </button>
           </div>
         </div>
+        <hr class="mt-2 mb-3">
       </div>
+    </div>
 
-      <div class="column">
-        <label class="label">Arbeitsstunden pro Monat</label>
-        <div class="field has-addons">
-          <div class="control is-expanded">
-            <input class="input" v-model="employee.maxHoursPerMonth" type="number">
+    <div class="page-body">
+      <div class="container-xl">
+        <div class="row align-items-start">
+          <div class="col">
+            <label class="form-label">Name des Arbeitnehmers</label>
+            <input class="form-control" v-model="employee.name" type="text">
           </div>
-          <p class="control">
-            <a class="button is-static">
-              h/m
-            </a>
-          </p>
-        </div>
-      </div>
+          <div class="col">
+            <label class="form-label">Arbeitsstunden pro Monat</label>
+            <div class="input-group">
+              <input class="form-control" v-model="employee.maxHoursPerMonth" type="number">
+              <span class="input-group-text bg-secondary">
+                h/m
+              </span>
+            </div>
+          </div>
+          <div class="col">
+            <label class="form-label">Aktionen</label>
+            <div class="btn-group w-100">
+              <button class="btn btn-danger" @click="deleteUser"><span v-if="!confirmDelete">Mitarbeiter löschen</span><span v-if="confirmDelete">?</span></button>
+              <button class="btn btn-success" @click="updateEmployee">Änderungen sichern</button>
+            </div>
+          </div>
 
-      <div class="column">
-        <label class="label">Aktionen</label>
-        <div class="field has-addons">
-          <div class="control is-expanded">
-            <button class="is-fullwidth button is-danger w-50 is-inline is-light" @click="deleteUser" :class="deleting ? 'is-deleting':''"><span v-if="!confirmDelete">Mitarbeiter löschen</span><i class="bi bi-question-lg" v-if="confirmDelete"></i> </button>
-          </div>
-          <div class="control is-expanded">
-            <button class="is-fullwidth button is-primary w-50 is-inline is-light" @click="updateEmployee">Änderungen sichern</button>
-          </div>
         </div>
+
+        <hr class="mt-5">
+
+        <div class="alert alert-warning" v-if="employee.currentShift !== null">
+          Es liegt gerade eine aktive Schicht vor!
+        </div>
+
+        <ul class="pagination">
+          <li class="page-item" :class="showMonth === month ? 'active':''" v-for="(shifts, month) in shiftMonths">
+            <button @click="showMonth = month" class="btn page-link">{{getMonthName(month)}}</button>
+          </li>
+        </ul>
+
+        <table class="table is-fullwidth">
+          <thead>
+          <tr>
+            <th>Start</th>
+            <th>Stop</th>
+            <th>Total</th>
+          </tr>
+          </thead>
+          <template v-for="(shifts, month) in shiftMonths">
+            <thead>
+            <tr>
+              <th colspan="2">{{getMonthName(month)}}</th>
+              <th>{{sumShifts(shifts)}}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="shift in shifts">
+              <td>{{new Date(shift.startTime).toLocaleString()}}</td>
+              <td>{{new Date(shift.endTime).toLocaleTimeString()}}</td>
+              <td>{{toSecondsString(shift.totalSeconds*1000)}}</td>
+            </tr>
+            </tbody>
+            <tr v-for="shift in shifts"></tr>
+          </template>
+        </table>
 
       </div>
     </div>
-    <hr>
-    <div class="notification is-warning" v-if="employee.currentShift !== null">
-      Es liegt gerade eine aktive Schicht vor!
-    </div>
-    <nav class="pagination" role="navigation" aria-label="pagination">
-      <ul class="pagination-list">
-        <li v-for="(shifts, month) in shiftMonths">
-          <button @click="showMonth = month" class="button pagination-link" :class="showMonth === month ? 'is-current':''">{{getMonthName(month)}}</button>
-        </li>
-      </ul>
-    </nav>
-    <table class="table is-fullwidth">
-      <thead>
-      <tr>
-        <th>Start</th>
-        <th>Stop</th>
-        <th>Total</th>
-      </tr>
-      </thead>
-      <template v-for="(shifts, month) in shiftMonths">
-        <thead>
-        <tr>
-          <th colspan="2">{{getMonthName(month)}}</th>
-          <th>{{sumShifts(shifts)}}</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr v-for="shift in shifts">
-          <td>{{new Date(shift.startTime).toLocaleString()}}</td>
-          <td>{{new Date(shift.endTime).toLocaleTimeString()}}</td>
-          <td>{{toSecondsString(shift.totalSeconds*1000)}}</td>
-        </tr>
-        </tbody>
-        <tr v-for="shift in shifts"></tr>
-      </template>
-    </table>
   </div>
 </template>
 
