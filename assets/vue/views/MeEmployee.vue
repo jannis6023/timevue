@@ -1,5 +1,5 @@
 <template>
-  <ShiftHistoryModal :show="showHistory" :employee="employee" @close="showHistory = false;"/>
+  <EmployeeShiftHistoryModal :show="showHistory" :employee="employee" @close="showHistory = false;"/>
 
   <div class="page page-center">
     <div class="container-tight py-4" v-if="employee !== null">
@@ -31,10 +31,11 @@
 import axios from "axios";
 import ShiftHistoryModal from "../components/ShiftHistoryModal";
 import checkPoint from "point-in-cirlce"
+import EmployeeShiftHistoryModal from "../components/EmployeeShiftHistoryModal";
 
 export default {
   name: "MeEmployee",
-  components: {ShiftHistoryModal},
+  components: {EmployeeShiftHistoryModal, ShiftHistoryModal},
   props: ["id"],
   data(){
     return {
