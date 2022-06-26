@@ -6,83 +6,92 @@
       <div class="page-header d-print-none">
         <div class="row g-2 align-items-center">
           <div class="col">
-            <h1 class="page-title fs-1">
+            <!-- Page pre-title -->
+            <div class="page-pretitle">
+              Arbeitnehmer
+            </div>
+            <h2 class="page-title">
               {{employee.name}}
-            </h1>
+            </h2>
           </div>
-          <div class="col col-md-auto ms-auto d-print-none">
-            <button class="btn btn-primary" @click="copyURL">
-              Link kopieren
-            </button>
+          <!-- Page title actions -->
+          <div class="col-auto ms-auto d-print-none">
+            <button class="btn btn-primary" @click="copyURL">Link kopieren</button>
           </div>
         </div>
-        <hr class="mt-2 mb-3">
       </div>
     </div>
 
     <div class="page-body">
       <div class="container-xl">
-        <div class="row align-items-start">
-          <div class="col">
-            <label class="form-label">Name des Arbeitnehmers</label>
-            <input class="form-control" v-model="employee.name" type="text">
+        <div class="card mb-3">
+          <div class="card-header">
+            <h3 class="card-title">Stammdaten</h3>
           </div>
-          <div class="col">
-            <label class="form-label">Arbeitsstunden pro Monat</label>
-            <div class="input-group">
-              <input class="form-control" v-model="employee.maxHoursPerMonth" type="number">
-              <span class="input-group-text bg-secondary">
-                h/m
-              </span>
+          <div class="card-body">
+            <div class="row align-items-start">
+              <div class="col">
+                <label class="form-label">Name des Arbeitnehmers</label>
+                <input class="form-control" v-model="employee.name" type="text">
+              </div>
+              <div class="col">
+                <label class="form-label">Arbeitsstunden pro Monat</label>
+                <div class="input-group">
+                  <input class="form-control" v-model="employee.maxHoursPerMonth" type="number">
+                  <span class="input-group-text bg-secondary">
+                    h/m
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="col">
-            <label class="form-label">Aktionen</label>
-            <div class="btn-group w-100">
-              <button class="btn btn-danger" @click="deleteUser"><span v-if="!confirmDelete">Mitarbeiter löschen</span><span v-if="confirmDelete">?</span></button>
-              <button class="btn btn-success" @click="updateEmployee">Änderungen sichern</button>
-            </div>
+          <div class="card-footer d-flex justify-content-between">
+            <button class="btn btn-danger me-auto" @click="deleteUser"><span v-if="!confirmDelete">Mitarbeiter löschen</span><span v-if="confirmDelete">?</span></button>
+            <button class="btn btn-success" @click="updateEmployee">Änderungen sichern</button>
           </div>
-
         </div>
 
-        <hr class="mt-5">
-
-        <div class="alert alert-warning" v-if="employee.currentShift !== null">
+        <div class="alert alert-warning mb-3" v-if="employee.currentShift !== null">
           Es liegt gerade eine aktive Schicht vor!
         </div>
 
-        <ul class="pagination">
-          <li class="page-item" :class="showMonth === month ? 'active':''" v-for="(shifts, month) in shiftMonths">
-            <button @click="showMonth = month" class="btn page-link">{{getMonthName(month)}}</button>
-          </li>
-        </ul>
-
-        <table class="table is-fullwidth">
-          <thead>
-          <tr>
-            <th>Start</th>
-            <th>Stop</th>
-            <th>Total</th>
-          </tr>
-          </thead>
-          <template v-for="(shifts, month) in shiftMonths">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title me-3">Stundenübersicht</h3>
+            <ul class="pagination mb-0">
+              <li class="page-item" :class="showMonth === month ? 'active':''" v-for="(shifts, month) in shiftMonths">
+                <button @click="showMonth = month" class="btn page-link">{{getMonthName(month)}}</button>
+              </li>
+            </ul>
+          </div>
+          <table class="table is-fullwidth card-table">
             <thead>
             <tr>
-              <th colspan="2">{{getMonthName(month)}}</th>
-              <th>{{sumShifts(shifts)}}</th>
+              <th>Start</th>
+              <th>Stop</th>
+              <th>Total</th>
             </tr>
             </thead>
-            <tbody>
-            <tr v-for="shift in shifts">
-              <td>{{new Date(shift.startTime).toLocaleString()}}</td>
-              <td>{{new Date(shift.endTime).toLocaleTimeString()}}</td>
-              <td>{{toSecondsString(shift.totalSeconds*1000)}}</td>
-            </tr>
-            </tbody>
-            <tr v-for="shift in shifts"></tr>
-          </template>
-        </table>
+            <template v-for="(shifts, month) in shiftMonths">
+              <thead>
+              <tr>
+                <th colspan="2">{{getMonthName(month)}}</th>
+                <th>{{sumShifts(shifts)}}</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr v-for="shift in shifts">
+                <td>{{new Date(shift.startTime).toLocaleString()}}</td>
+                <td>{{new Date(shift.endTime).toLocaleTimeString()}}</td>
+                <td>{{toSecondsString(shift.totalSeconds*1000)}}</td>
+              </tr>
+              </tbody>
+              <tr v-for="shift in shifts"></tr>
+            </template>
+          </table>
+        </div>
+
+
 
       </div>
     </div>

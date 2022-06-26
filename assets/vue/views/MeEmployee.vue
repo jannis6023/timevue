@@ -32,6 +32,7 @@ import axios from "axios";
 import ShiftHistoryModal from "../components/ShiftHistoryModal";
 import checkPoint from "point-in-cirlce"
 import EmployeeShiftHistoryModal from "../components/EmployeeShiftHistoryModal";
+import "bootstrap"
 
 export default {
   name: "MeEmployee",
