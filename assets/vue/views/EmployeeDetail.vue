@@ -64,7 +64,7 @@
               </li>
             </ul>
           </div>
-          <table class="table is-fullwidth card-table">
+          <table class="table is-fullwidth card-table" v-if="showMonth !== null">
             <thead>
             <tr>
               <th>Start</th>
@@ -72,22 +72,19 @@
               <th>Total</th>
             </tr>
             </thead>
-            <template v-for="(shifts, month) in shiftMonths">
-              <thead>
-              <tr>
-                <th colspan="2">{{getMonthName(month)}}</th>
-                <th>{{sumShifts(shifts)}}</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr v-for="shift in shifts">
-                <td>{{new Date(shift.startTime).toLocaleString()}}</td>
-                <td>{{new Date(shift.endTime).toLocaleTimeString()}}</td>
-                <td>{{toSecondsString(shift.totalSeconds*1000)}}</td>
-              </tr>
-              </tbody>
-              <tr v-for="shift in shifts"></tr>
-            </template>
+            <tbody>
+            <tr v-for="shift in currentMonthShifts">
+              <td>{{new Date(shift.startTime).toLocaleString()}}</td>
+              <td>{{new Date(shift.endTime).toLocaleTimeString()}}</td>
+              <td>{{toSecondsString(shift.totalSeconds*1000)}}</td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+              <th colspan="2">{{getMonthName(showMonth)}}</th>
+              <th>{{sumShifts(currentMonthShifts)}}</th>
+            </tr>
+            </tfoot>
           </table>
         </div>
 
@@ -120,6 +117,13 @@ export default {
         })
   },
   computed: {
+    currentMonthShifts(){
+      if(this.showMonth === null){
+        return [];
+      }else{
+        return this.shiftMonths[this.showMonth]
+      }
+    },
     shiftMonths(){
       if(this.employee === null){
         return []
@@ -133,7 +137,7 @@ export default {
             months[new Date(shift.startTime).getMonth() + ";" + new Date(shift.startTime).getFullYear()].push(shift)
           }
         })
-        return months
+        return months;
       }
     },
     totalDateDiffYear(){
@@ -179,6 +183,7 @@ export default {
       return `${dateDifference.getHours()-1}h ${dateDifference.getSeconds() > 0 ? dateDifference.getMinutes() : dateDifference.getMinutes()-1}m`
     },
     getMonthName(monthIndex){
+      console.log(monthIndex)
       const date = new Date(null);
       date.setMonth(monthIndex.split(';')[0]);
       date.setFullYear(monthIndex.split(';')[1])
