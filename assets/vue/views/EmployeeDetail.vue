@@ -3,7 +3,7 @@
   <div class="page-wrapper" v-if="employee !== null">
     <div class="container-xl">
       <!-- Page title -->
-      <div class="page-header d-print-none">
+      <div class="page-header">
         <div class="row g-2 align-items-center">
           <div class="col">
             <!-- Page pre-title -->
@@ -24,7 +24,7 @@
 
     <div class="page-body">
       <div class="container-xl">
-        <div class="card mb-3">
+        <div class="card mb-3 d-print-none">
           <div class="card-header">
             <h3 class="card-title">Stammdaten</h3>
           </div>
@@ -51,7 +51,7 @@
           </div>
         </div>
 
-        <div class="alert alert-warning mb-3" v-if="employee.currentShift !== null">
+        <div class="alert alert-warning mb-3 d-print-none" v-if="employee.currentShift !== null">
           Es liegt gerade eine aktive Schicht vor!
         </div>
 
