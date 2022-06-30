@@ -90,7 +90,7 @@
 
         <div class="d-none d-print-block">
           <hr>
-          <p>Ausdruck generiert am {{new Date().toLocaleDateString()}} um {{new Date().toLocaleTimeString()}} von {{this.$store.state.user.displayName}}</p>
+          <p>Ausdruck generiert am {{new Date().toLocaleDateString()}} um {{new Date().toLocaleTimeString()}} von {{this.$store.state.user.display_name}}</p>
         </div>
 
 
