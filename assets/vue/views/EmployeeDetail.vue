@@ -82,7 +82,7 @@
             <tfoot>
             <tr>
               <th colspan="2">{{getMonthName(showMonth)}}</th>
-              <th>{{sumShifts(currentMonthShifts)}}</th>
+              <th>{{toSecondsString(sumShifts(currentMonthShifts)*1000)}}</th>
             </tr>
             </tfoot>
           </table>
@@ -161,16 +161,10 @@ export default {
       let result = 0;
       if(this.employee !== null){
         shifts.forEach(s => {
-          const dateDifference = new Date(s.totalSeconds*1000)
-          if(dateDifference.getSeconds() > 0){
-            dateDifference.setMinutes(dateDifference.getMinutes()+1)
-          }
-
-          result = result + dateDifference.getTime()
+          result = result + s.totalSeconds;
         })
         console.log(result)
-        const dateDifference = new Date(result);
-        return `${dateDifference.getHours()-1}h ${dateDifference.getSeconds() > 0 ? dateDifference.getMinutes() : dateDifference.getMinutes()-1}m`
+        return result;
       }else{
         return -1;
       }
