@@ -4,6 +4,7 @@ import DashBoard from "../views/DashBoard";
 import Team from "../views/Team";
 import EmployeeDetail from "../views/EmployeeDetail";
 import MeEmployee from "../views/MeEmployee";
+import store from "../store/index"
 
 const routes = [
     {
@@ -40,6 +41,14 @@ const routes = [
 const router = createRouter({
     history: createWebHistory(),
     routes
+})
+
+function isMobile() {
+    return screen.width <= 760;
+}
+
+router.afterEach((to, from) => {
+    if(isMobile()){store.commit('toggleNav')}
 })
 
 export default router

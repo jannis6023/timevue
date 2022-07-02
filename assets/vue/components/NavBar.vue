@@ -1,7 +1,7 @@
 <template>
   <header class="navbar navbar-expand-md navbar-light d-print-none">
     <div class="container-fluid">
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
+      <button class="navbar-toggler" type="button" :aria-expanded="$store.state.showNavMobile ? 'true':'false'" @click="$store.commit('toggleNav')">
         <span class="navbar-toggler-icon"></span>
       </button>
       <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
@@ -23,7 +23,7 @@
           </div>
         </div>
       </div>
-      <div class="collapse navbar-collapse" id="navbar-menu">
+      <div class="collapse navbar-collapse" ref="collapse" id="navbar-menu">
         <div class="d-flex flex-column flex-md-row flex-fill align-items-stretch align-items-md-center">
           <ul class="navbar-nav">
             <NavLink to="/admin/dashboard">Dashboard</NavLink>
@@ -36,10 +36,28 @@
 </template>
 
 <script>
+import {Collapse} from "bootstrap"
+import {mapState} from "vuex"
 import NavLink from "./NavLink";
 export default {
   name: "NavBar",
-  components: {NavLink}
+  components: {NavLink},
+  mounted() {
+    this.collapse = Collapse.getOrCreateInstance(this.$refs.collapse, {
+      toggle: false
+    })
+  },
+  data(){
+    return {
+      collapse: null
+    }
+  },
+  watch: {
+    showNavMobile(newValue, oldValue){
+      this.collapse.toggle()
+    }
+  },
+  computed: mapState(["showNavMobile"])
 }
 </script>
 
