@@ -25,7 +25,7 @@
           <tr>
             <td>Total</td>
             <td></td>
-            <td>{{totalShifts}}</td>
+            <td>{{toSecondsString(sumShifts(employee.shifts.filter(s => new Date(s.startTime).getMonth() === new Date().getMonth()))*1000)}}</td>
           </tr>
           </tfoot>
         </table>
@@ -57,7 +57,19 @@ export default {
         dateDifference.setMinutes(dateDifference.getMinutes()+1)
       }
       return `${dateDifference.getHours()-1}h ${dateDifference.getSeconds() > 0 ? dateDifference.getMinutes() : dateDifference.getMinutes()-1}m`
-    }
+    },
+    sumShifts(shifts){
+      let result = 0;
+      if(this.employee !== null){
+        shifts.forEach(s => {
+          result = result + s.totalSeconds;
+        })
+        console.log(result)
+        return result;
+      }else{
+        return -1;
+      }
+    },
   },
   watch: {
     show(newVal, oldVal){
@@ -68,24 +80,6 @@ export default {
     }
   },
   computed: {
-    totalShifts(){
-      let result = 0;
-      if(this.employee !== null){
-        this.employee.shifts.forEach(s => {
-          const dateDifference = new Date(s.totalSeconds*1000)
-          if(dateDifference.getSeconds() > 0){
-            dateDifference.setMinutes(dateDifference.getMinutes()+1)
-          }
-
-          result = result + dateDifference.getTime()
-        })
-        console.log(result)
-        const dateDifference = new Date(result);
-        return `${dateDifference.getHours()-1}h ${dateDifference.getSeconds() > 0 ? dateDifference.getMinutes() : dateDifference.getMinutes()-1}m`
-      }else{
-        return -1;
-      }
-    }
   },
   mounted() {
     this.$refs[this.name].addEventListener("hide.bs.modal", (event) => {

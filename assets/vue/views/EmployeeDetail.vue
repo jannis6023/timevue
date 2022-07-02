@@ -60,7 +60,7 @@
             <h3 class="card-title me-3">Stundenübersicht</h3>
             <ul class="pagination mb-0">
               <li class="page-item" :class="showMonth === month ? 'active':''" v-for="(shifts, month) in shiftMonths">
-                <button @click="showMonth = month" class="btn page-link">{{getMonthName(month)}}</button>
+                <button v-if="month !== undefined" @click="showMonth = month" class="btn page-link">{{getMonthName(month)}}</button>
               </li>
             </ul>
           </div>

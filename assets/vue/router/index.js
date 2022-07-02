@@ -27,6 +27,9 @@ const routes = [
                 name: 'employeeDetail',
                 component: EmployeeDetail,
                 props: true
+            },
+            {
+                path: 'shiftplan/template'
             }
         ]
     },
