@@ -64,7 +64,7 @@
               </li>
             </ul>
           </div>
-          <table class="table is-fullwidth card-table" v-if="showMonth !== null">
+          <table class="table is-fullwidth card-table" v-if="showMonth !== null && showMonth !== undefined">
             <thead>
             <tr>
               <th>Start</th>
