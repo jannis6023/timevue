@@ -3,6 +3,7 @@
 namespace App\Controller\api\v1;
 
 use App\Entity\Employee;
+use App\Entity\Shift;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,6 +14,19 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class AdminApiController extends AbstractController
 {
+    /**
+     * @Route("/stats")
+     */
+    function getStats(EntityManagerInterface $em){
+        $shiftMonthTotal = (int) $em->getRepository(Shift::class)->createQueryBuilder('s')
+            ->where('s.startTime > :currentMonth')
+            ->setParameter('currentMonth', (new \DateTime('first day of ' . date('F') . " " . date('Y')))->format('Y-m-d'))
+            ->select('SUM(s.totalSeconds)')
+            ->getQuery()->getSingleScalarResult();
+
+        return $this->json($shiftMonthTotal);
+    }
+
     /**
      * @Route("/employees", methods={"GET"})
      */
