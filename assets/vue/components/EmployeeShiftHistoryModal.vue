@@ -4,10 +4,15 @@
       <div class="modal-content">
         <button type="button" class="btn-close" @click="$emit('close')" aria-label="Close"></button>
         <div class="modal-header">
-          <h3 class="modal-title">Schichthistorie</h3>
+          <h3 class="modal-title me-3">Schichthistorie</h3>
+          <ul class="pagination mb-0">
+            <li class="page-item" :class="showMonth === month ? 'active':''" v-for="(shifts, month) in shiftMonths">
+              <button v-if="month !== undefined" @click="showMonth = month" class="btn page-link">{{getMonthName(month)}}</button>
+            </li>
+          </ul>
         </div>
         <div class="modal-body">
-          <table v-if="employee !== null" class="table is-fullwidth">
+          <table v-if="employee !== null && showMonth !== null && showMonth !== undefined" class="table is-fullwidth">
             <thead>
             <tr>
               <th>Start</th>
@@ -16,7 +21,7 @@
             </tr>
             </thead>
             <tbody v-if="employee !== null">
-            <tr v-for="shift in employee.shifts.filter(s => new Date(s.startTime).getMonth() === new Date().getMonth())">
+            <tr v-for="shift in currentMonthShifts">
               <td>{{new Date(shift.startTime).toLocaleString()}}</td>
               <td>{{new Date(shift.endTime).toLocaleTimeString()}}</td>
               <td>{{toSecondsString(shift.totalSeconds * 1000)}}</td>
@@ -44,7 +49,8 @@ export default {
   name: "EmployeeShiftHistoryModal",
   data(){
     return {
-      name: "EmployeeShiftHistoryModal"
+      name: "EmployeeShiftHistoryModal",
+      showMonth: null
     }
   },
   props: ["show", "employee"],
@@ -52,6 +58,18 @@ export default {
   methods: {
     closeModal(){
       this.$emit('close', false)
+    },
+    sumShiftsMinutes(shifts){
+      let minutes = 0;
+      shifts.forEach(s => {
+        minutes = minutes + Math.round(s.totalSeconds / 60)
+      })
+      return minutes;
+    },
+    formatMinutes(minutes){
+      let hoursString = Math.floor(minutes / 60)
+      let minutesString = minutes % 60;
+      return hoursString + "h " + minutesString + "m"
     },
     toSecondsString(milliseconds){
       const dateDifference = new Date(milliseconds)
@@ -72,6 +90,13 @@ export default {
         return -1;
       }
     },
+    getMonthName(monthIndex){
+      console.log(monthIndex)
+      const date = new Date(null);
+      date.setMonth(monthIndex.split(';')[0]);
+      date.setFullYear(monthIndex.split(';')[1])
+      return date.toLocaleString('default', {month: "long", year: 'numeric'})
+    },
   },
   watch: {
     show(newVal, oldVal){
@@ -79,9 +104,35 @@ export default {
         let modal = Modal.getOrCreateInstance(this.$refs[this.name])
         modal.toggle()
       }
+    },
+    employee(){
+      this.showMonth = Object.keys(this.shiftMonths)[Object.keys(this.shiftMonths).length-1]
     }
   },
   computed: {
+    currentMonthShifts(){
+      if(this.showMonth === null){
+        return [];
+      }else{
+        return this.shiftMonths[this.showMonth]
+      }
+    },
+    shiftMonths(){
+      if(this.employee === null){
+        return []
+      }else{
+        const months = {}
+        this.employee.shifts.forEach(shift => {
+          if(months[new Date(shift.startTime).getMonth() + ";" + new Date(shift.startTime).getFullYear()] !== undefined){
+            months[new Date(shift.startTime).getMonth() + ";" + new Date(shift.startTime).getFullYear()].push(shift)
+          }else{
+            months[new Date(shift.startTime).getMonth() + ";" + new Date(shift.startTime).getFullYear()] = []
+            months[new Date(shift.startTime).getMonth() + ";" + new Date(shift.startTime).getFullYear()].push(shift)
+          }
+        })
+        return months;
+      }
+    },
   },
   mounted() {
     this.$refs[this.name].addEventListener("hide.bs.modal", (event) => {

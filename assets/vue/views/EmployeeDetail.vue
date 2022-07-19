@@ -118,7 +118,7 @@ export default {
     axios.get("/api/v1/admin/employees/" + this.id)
         .then(r => {
           this.employee = r.data
-          this.showMonth = Object.keys(this.shiftMonths)[0]
+          this.showMonth = Object.keys(this.shiftMonths)[Object.keys(this.shiftMonths).length-1]
         })
   },
   computed: {

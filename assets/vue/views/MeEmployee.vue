@@ -52,13 +52,6 @@ export default {
     startShift(){
       this.loading = true
 
-      axios.put("/api/v1/employee/" + this.id + "/shifts")
-          .then(r => {
-            this.$toast.success("Schicht gestartet!")
-            this.loadData()
-            this.loading = false
-          })
-
       navigator.geolocation.getCurrentPosition(pos => {
         axios.get("/var/requiredLocation")
             .then(r => {
