@@ -164,7 +164,7 @@ export default {
   },
   methods: {
     sumShifts(shifts){
-      console.log(shifts)
+      console.log("Schichten: ", shifts)
       let result = 0;
       if(this.employee !== null){
         shifts.forEach(s => {
