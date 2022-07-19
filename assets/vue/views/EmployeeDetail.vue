@@ -82,8 +82,7 @@
             <tfoot>
             <tr>
               <th colspan="2">{{getMonthName(showMonth)}}</th>
-              <th>{{toSecondsString(sumShifts(currentMonthShifts)*1000)}}</th>
-              <th>{{sumShifts(currentMonthShifts)}}</th>
+              <th>{{formatMinutes(sumShiftsMinutes(currentMonthShifts))}}</th>
             </tr>
             </tfoot>
           </table>
@@ -163,6 +162,18 @@ export default {
     }
   },
   methods: {
+    sumShiftsMinutes(shifts){
+      let minutes = 0;
+      shifts.forEach(s => {
+        minutes = minutes + Math.round(s.totalSeconds / 60)
+      })
+      return minutes;
+    },
+    formatMinutes(minutes){
+      let hoursString = Math.floor(minutes / 60)
+      let minutesString = minutes % 60;
+      return hoursString + "h " + minutesString + "m"
+    },
     sumShifts(shifts){
       console.log("Schichten: ", shifts)
       let result = 0;
