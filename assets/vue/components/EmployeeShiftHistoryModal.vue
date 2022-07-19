@@ -6,29 +6,31 @@
         <div class="modal-header">
           <h3 class="modal-title">Schichthistorie</h3>
         </div>
-        <table v-if="employee !== null" class="table is-fullwidth">
-          <thead>
-          <tr>
-            <th>Start</th>
-            <th>Ende</th>
-            <th>Total</th>
-          </tr>
-          </thead>
-          <tbody v-if="employee !== null">
-          <tr v-for="shift in employee.shifts.filter(s => new Date(s.startTime).getMonth() === new Date().getMonth())">
-            <td>{{new Date(shift.startTime).toLocaleString()}}</td>
-            <td>{{new Date(shift.endTime).toLocaleTimeString()}}</td>
-            <td>{{toSecondsString(shift.totalSeconds * 1000)}}</td>
-          </tr>
-          </tbody>
-          <tfoot>
-          <tr>
-            <td>Total</td>
-            <td></td>
-            <td>{{toSecondsString(sumShifts(employee.shifts.filter(s => new Date(s.startTime).getMonth() === new Date().getMonth()))*1000)}}</td>
-          </tr>
-          </tfoot>
-        </table>
+        <div class="modal-body">
+          <table v-if="employee !== null" class="table is-fullwidth">
+            <thead>
+            <tr>
+              <th>Start</th>
+              <th>Ende</th>
+              <th>Total</th>
+            </tr>
+            </thead>
+            <tbody v-if="employee !== null">
+            <tr v-for="shift in employee.shifts.filter(s => new Date(s.startTime).getMonth() === new Date().getMonth())">
+              <td>{{new Date(shift.startTime).toLocaleString()}}</td>
+              <td>{{new Date(shift.endTime).toLocaleTimeString()}}</td>
+              <td>{{toSecondsString(shift.totalSeconds * 1000)}}</td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+              <td>Total</td>
+              <td></td>
+              <td>{{toSecondsString(sumShifts(employee.shifts.filter(s => new Date(s.startTime).getMonth() === new Date().getMonth()))*1000)}}</td>
+            </tr>
+            </tfoot>
+          </table>
+        </div>
       </div>
     </div>
   </div>

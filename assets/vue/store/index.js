@@ -8,7 +8,7 @@ export default createStore({
   },
   mutations: {
     fetchUser(){
-      axios.get("https://time.hemingway-hof.de/api/v1/me/")
+      axios.get(window.location.protocol + '//' + window.location.host + "/api/v1/me/")
           .then(r => {
             this.state.user = r.data
           })
