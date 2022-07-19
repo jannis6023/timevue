@@ -83,6 +83,7 @@
             <tr>
               <th colspan="2">{{getMonthName(showMonth)}}</th>
               <th>{{toSecondsString(sumShifts(currentMonthShifts)*1000)}}</th>
+              <th>{{sumShifts(currentMonthShifts)}}</th>
             </tr>
             </tfoot>
           </table>
@@ -163,6 +164,7 @@ export default {
   },
   methods: {
     sumShifts(shifts){
+      console.log(shifts)
       let result = 0;
       if(this.employee !== null){
         shifts.forEach(s => {

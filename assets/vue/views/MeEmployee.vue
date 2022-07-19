@@ -59,7 +59,7 @@ export default {
             this.loading = false
           })
 
-      /*navigator.geolocation.getCurrentPosition(pos => {
+      navigator.geolocation.getCurrentPosition(pos => {
         axios.get("/var/requiredLocation")
             .then(r => {
               const circle = {
@@ -79,7 +79,7 @@ export default {
 
               this.loading = false
             })
-      })*/
+      })
 
     },
     loadData(){
