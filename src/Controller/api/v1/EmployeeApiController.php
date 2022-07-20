@@ -32,6 +32,9 @@ class EmployeeApiController extends AbstractController
         $newShift = new Shift();
         $newShift->setEmployee($employee);
         $newShift->setStartTime(new \DateTime());
+        if(array_key_exists("startLocation", $data)){
+            $newShift->setStartLocation($data["startLocation"]);
+        }
 
         /*
         if($data["location"] != $this->getParameter('geofence')){
@@ -53,12 +56,17 @@ class EmployeeApiController extends AbstractController
     /**
      * @Route("/{employee}/shifts/{shift}", methods={"DELETE"})
      */
-    function stopShift(Employee $employee, Shift $shift, EntityManagerInterface $em){
+    function stopShift(Employee $employee, Shift $shift, EntityManagerInterface $em, Request $request){
+        $data = json_decode($request->getContent(), true);
+
         if(!$employee->isActive()){
             return $this->json(["error" => "Inactive."], 400);
         }
         $shift->setEndTime(new \DateTime());
         $shift->setTotalSeconds($shift->getEndTime()->getTimestamp()-$shift->getStartTime()->getTimestamp());
+        if(array_key_exists("stopLocation", $data)){
+            $shift->setStopLocation($data["stopLocation"]);
+        }
         $employee->setCurrentShift(null);
         $em->persist($employee);
 

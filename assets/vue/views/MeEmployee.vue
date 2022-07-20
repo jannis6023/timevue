@@ -60,8 +60,11 @@ export default {
                 circleLng : parseFloat(r.data.lon),
                 circleRadius : parseFloat(r.data.rad)
               }
+              console.log(pos.coords)
               if(checkPoint(pos.coords.latitude, pos.coords.longitude, circle).result){
-                axios.put("/api/v1/employee/" + this.id + "/shifts")
+                axios.put("/api/v1/employee/" + this.id + "/shifts", {
+                  "startLocation": pos.coords.latitude + "," + pos.coords.longitude
+                })
                     .then(r => {
                       this.$toast.success("Schicht gestartet!")
                       this.loadData()
@@ -72,6 +75,9 @@ export default {
 
               this.loading = false
             })
+      }, () => {
+        this.$toast.error("Sie können keine Schicht ohne Standortfreigabe starten!")
+        this.loading = false
       })
 
     },
@@ -85,11 +91,25 @@ export default {
           })
     },
     stopShift(){
-      axios.delete("/api/v1/employee/" + this.id + "/shifts/" + this.employee.currentShift.id)
-          .then(r => {
-            this.$toast.success("Schicht beendet!")
-            this.loadData()
-          })
+      this.loading = true
+      navigator.geolocation.getCurrentPosition(pos => {
+        axios.delete("/api/v1/employee/" + this.id + "/shifts/" + this.employee.currentShift.id, {
+          data: JSON.stringify({
+            "stopLocation": pos.coords.latitude + "," + pos.coords.longitude
+          }),
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
+            .then(r => {
+              this.$toast.success("Schicht beendet!")
+              this.loadData()
+              this.loading = false
+            })
+      }, () => {
+        this.$toast.error("Sie können keine Schicht ohne Standortfreigabe stoppen!")
+        this.loading = false
+      });
     }
   },
   computed: {

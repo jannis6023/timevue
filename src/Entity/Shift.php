@@ -43,6 +43,16 @@ class Shift
      */
     private $totalSeconds;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $startLocation;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $stopLocation;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -92,6 +102,30 @@ class Shift
     public function setTotalSeconds(?int $totalSeconds): self
     {
         $this->totalSeconds = $totalSeconds;
+
+        return $this;
+    }
+
+    public function getStartLocation(): ?string
+    {
+        return $this->startLocation;
+    }
+
+    public function setStartLocation(?string $startLocation): self
+    {
+        $this->startLocation = $startLocation;
+
+        return $this;
+    }
+
+    public function getStopLocation(): ?string
+    {
+        return $this->stopLocation;
+    }
+
+    public function setStopLocation(?string $stopLocation): self
+    {
+        $this->stopLocation = $stopLocation;
 
         return $this;
     }
