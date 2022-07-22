@@ -1,5 +1,5 @@
 <template>
-
+  <CreateShiftModal :show="showCreateShiftModal" @close="showCreateShiftModal = false;" :employee="employee"/>
   <div class="page-wrapper" v-if="employee !== null">
     <div class="container-xl">
       <!-- Page title -->
@@ -16,7 +16,8 @@
           </div>
           <!-- Page title actions -->
           <div class="col-auto ms-auto d-print-none">
-            <button class="btn btn-primary" @click="copyURL">Link kopieren</button>
+            <button class="btn" @click="copyURL">Link kopieren</button>
+            <button class="btn btn-primary" @click="showCreateShiftModal = true">Schicht nachtragen</button>
           </div>
         </div>
       </div>
@@ -65,7 +66,7 @@
             </ul>
           </div>
           <table class="table is-fullwidth card-table" v-if="showMonth !== null && showMonth !== undefined">
-            <thead>
+            <thead style="position:sticky;top: 0;">
             <tr>
               <th>Start</th>
               <th>Stop</th>
@@ -102,16 +103,19 @@
 
 <script>
 import axios from "axios";
+import CreateShiftModal from "../components/CreateShiftModal";
 
 export default {
   name: "EmployeeDetail",
+  components: {CreateShiftModal},
   props: ["id"],
   data(){
     return {
       employee: null,
       showMonth: null,
       confirmDelete: false,
-      deleting: false
+      deleting: false,
+      showCreateShiftModal: false
     }
   },
   mounted() {
@@ -234,5 +238,7 @@ export default {
 </script>
 
 <style scoped>
-
+th{
+  position: sticky;
+}
 </style>

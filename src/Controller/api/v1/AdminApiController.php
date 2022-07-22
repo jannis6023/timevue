@@ -5,12 +5,14 @@ namespace App\Controller\api\v1;
 use App\Entity\Employee;
 use App\Entity\Shift;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/api/v1/admin")
+ * @IsGranted("ROLE_ADMIN")
  */
 class AdminApiController extends AbstractController
 {
@@ -77,6 +79,25 @@ class AdminApiController extends AbstractController
         $em->flush();
 
         return $this->json($employee, 200, [], ["groups" => "employee"]);
+    }
+
+    /**
+     * @Route("/employees/{employee}/shifts", methods={"PUT"})
+     */
+    function createShift(Employee $employee, Request $request, EntityManagerInterface $em){
+        $data = json_decode($request->getContent(), true);
+        $shift = new Shift();
+        $shift->setStartLocation(null);
+        $shift->setStopLocation(null);
+        $shift->setEmployee($employee);
+        $shift->setStartTime(new \DateTime($data["startTime"]));
+        $shift->setEndTime(new \DateTime($data["endTime"]));
+        $shift->setTotalSeconds($shift->getEndTime()->getTimestamp()-$shift->getStartTime()->getTimestamp());
+
+        $em->persist($shift);
+        $em->flush();
+
+        return $this->json($employee->getShifts(), 200, [], ["groups" => "employee"]);
     }
 
     /**
