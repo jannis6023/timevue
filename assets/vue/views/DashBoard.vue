@@ -17,7 +17,7 @@
       </div>
     </div>
 
-    <div class="page-body">
+    <div class="page-body" v-if="secondsTotal !== 0">
       <div class="container-xl">
         <div class="col-12">
           <div class="row row-cards">

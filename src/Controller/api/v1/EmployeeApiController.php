@@ -63,7 +63,7 @@ class EmployeeApiController extends AbstractController
             return $this->json(["error" => "Inactive."], 400);
         }
         $shift->setEndTime(new \DateTime());
-        $shift->setTotalSeconds($shift->getEndTime()->getTimestamp()-$shift->getStartTime()->getTimestamp());
+        $shift->setTotalSeconds(($shift->getEndTime()->getTimestamp()-$shift->getStartTime()->getTimestamp()) / 60);
         if(array_key_exists("stopLocation", $data)){
             $shift->setStopLocation($data["stopLocation"]);
         }

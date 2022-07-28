@@ -77,7 +77,7 @@
             <tr v-for="shift in currentMonthShifts">
               <td>{{new Date(shift.startTime).toLocaleString()}}</td>
               <td>{{new Date(shift.endTime).toLocaleTimeString()}}</td>
-              <td>{{toSecondsString(shift.totalSeconds*1000)}}</td>
+              <td>{{formatMinutes(Math.floor(shift.totalSeconds/60))}}</td>
             </tr>
             </tbody>
             <tfoot>
