@@ -130,7 +130,9 @@ export default {
       if(this.showMonth === null){
         return [];
       }else{
-        return this.shiftMonths[this.showMonth]
+        return this.shiftMonths[this.showMonth].sort(function(a,b){
+          return new Date(b.startTime) - new Date(a.startTime);
+        });
       }
     },
     shiftMonths(){
