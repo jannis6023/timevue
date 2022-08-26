@@ -32,7 +32,7 @@ class EmployeeApiController extends AbstractController
         $newShift = new Shift();
         $newShift->setEmployee($employee);
         $newShift->setStartTime(new \DateTime());
-        if(array_key_exists("startLocation", $data)){
+        if(is_array($data)){
             $newShift->setStartLocation($data["startLocation"]);
         }
 
@@ -64,7 +64,7 @@ class EmployeeApiController extends AbstractController
         }
         $shift->setEndTime(new \DateTime());
         $shift->setTotalSeconds($shift->getEndTime()->getTimestamp()-$shift->getStartTime()->getTimestamp());
-        if(array_key_exists("stopLocation", $data)){
+        if(is_array($data)){
             $shift->setStopLocation($data["stopLocation"]);
         }
         $employee->setCurrentShift(null);
